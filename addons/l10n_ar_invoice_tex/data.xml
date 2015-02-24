@@ -4,7 +4,7 @@
 	<report id="l10n_ar_wsafip_fe.l10n_ar_wsafip_fe_invoices"
 		string="Electronic Invoice"
 		model="account.invoice"
-		report_type="latex"
+		report_type="tex"
 		name="l10n_ar_wsafip_fe.report_invoice"
 		rml="l10n_ar_invoice_tex/report/invoice.tex"
 		menu="True"

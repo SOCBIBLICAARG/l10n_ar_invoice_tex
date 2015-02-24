@@ -8,26 +8,7 @@
 \begin{document}
 
 <%!
-    import re
-
-    def take(p, s, prefix="", suffix=""):
-        if not s: return False
-	prefix=prefix.replace('\\','\\\\')
-	suffix=suffix.replace('\\','\\\\')
-        m = re.search(prefix + p + suffix, s)
-        return m and m.group(1) or False
-
-    def flatdate(d):
-        return d.replace('-', '')
-
-    def is_class(o, cls):
-        r = o.journal_id.journal_class_id.document_class_id.name in cls
-        return r
-
-    def cuit_format(c):
-	cuit_string = '{0}-{1}-{2}'.format(c[:2], c[2:-1], c[-1]) if len(c)>4 else c
-        return cuit_string
-
+from openerp.addons.l10n_ar_invoice_tex.report.invoice import take, flatdate, is_class, cuit_format, codename_format, type_format
 %>
 
 % for o in objects:  
@@ -47,9 +28,9 @@
 %% INVOICE INFORMATION
 	\replica{${replica}}
 	\logo{${helper.putImage(company.logo, scale=0.3)}}
-	\codename{${o.journal_id.journal_class_id.document_class_id.name}}
+	\codename{${codename_format(o)}}
 	\codeid{${'%02i' % o.journal_id.journal_class_id.afip_code}}
-	\type{${(o.journal_id.journal_class_id.name.split('[')[0]).strip()}}
+	\type{${type_format(o)}}
 	\pointofsale{${'%04i' % o.journal_id.point_of_sale}}
 	\invnumber{${'%08i' % int(take(r'(\d*)', o.number, prefix=o.journal_id.sequence_id.prefix, suffix=o.journal_id.sequence_id.suffix))}}
 	\date{${formatLang(o.date_invoice, date=True) or 'Sin emitir'}}
