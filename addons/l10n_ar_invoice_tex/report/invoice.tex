@@ -32,7 +32,7 @@ from openerp.addons.l10n_ar_invoice_tex.report.invoice import take, flatdate, is
 	\codeid{${'%02i' % o.journal_id.journal_class_id.afip_code}}
 	\type{${type_format(o)}}
 	\pointofsale{${'%04i' % o.journal_id.point_of_sale}}
-	\invnumber{${'%08i' % int(take(r'(\d*)', o.number, prefix=o.journal_id.sequence_id.prefix, suffix=o.journal_id.sequence_id.suffix))}}
+	\invnumber{${'%08i' % int(take(o.number, prefix=o.journal_id.sequence_id.prefix, suffix=o.journal_id.sequence_id.suffix))}}
 	\date{${formatLang(o.date_invoice, date=True) or 'Sin emitir'}}
 	\currency{${o.currency_id.name}}
 	\currencysymbol{${o.currency_id.symbol if not '$' else '\\$'}}
@@ -58,8 +58,8 @@ from openerp.addons.l10n_ar_invoice_tex.report.invoice import take, flatdate, is
 
 	%% Customer information
 	\customername{${o.partner_id.name}}
-	\customerdocument{${o.partner_id.document_type_id.name}}%
-			 {${cuit_format(o.partner_id.document_number) if o.partner_id.document_type_id.name == "CUIT" else o.partner_id.document_number}}
+	\customerdocument{${(lambda dt: dt.name if dt.afip_code != 99 else 'Documento')(o.partner_id.document_type_id)}}%
+			 {${(lambda dt, dn: cuit_format(dn) if dn and dt.afip_code == 80 else (dt.name if dt.afip_code == 99 else dn))(o.partner_id.document_type_id, o.partner_id.document_number)}}
 	\customertaxcondition{${o.partner_id.responsability_id.name}}
 	\customeraddress{${
 		', '.join( "%s" % x for x in [
@@ -88,8 +88,8 @@ from openerp.addons.l10n_ar_invoice_tex.report.invoice import take, flatdate, is
 		o.journal_id.point_of_sale,
 		int(o.afip_cae or 0),
 		int(o.afip_cae_due!='False' and flatdate(o.afip_cae_due) or 0)
-		) %>
-	<% barcode =  "%s%i" % (barcode, sum( a*b for a,b in zip([3,1]*((len(barcode)/2)+1), map(int,barcode)) ) % 10) %>
+		)  %>
+	<% barcode = "%s%i" % (barcode, sum( a*b for a,b in zip([3,1]*((len(barcode)/2)+1), map(int,barcode)) ) % 10) %>
 	\barcode{${barcode}} 
 
 %% TAXES
