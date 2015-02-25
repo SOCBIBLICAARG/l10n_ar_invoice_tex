@@ -2,16 +2,15 @@ import re
 
 
 def take(p, s, prefix="", suffix=""):
-    if not s:
-        return False
-    prefix = prefix.replace('\\', '\\\\')
-    suffix = suffix.replace('\\', '\\\\')
-    m = re.search(prefix + p + suffix, s)
+    if not s: return False
+    prefix_re = '.*'.join([ re.escape(w) for w in re_label.split(prefix or '')])
+    suffix_re = '.*'.join([ re.escape(w) for w in re_label.split(suffix or '')])
+    m = re.search(prefix_re + r"(\d+)" + suffix_re, s)
     return m and m.group(1) or False
 
 
 def flatdate(d):
-    return d and d.replace('-', '')
+    return d.replace('-', '') if d else "000000"
 
 
 def is_class(o, cls):
