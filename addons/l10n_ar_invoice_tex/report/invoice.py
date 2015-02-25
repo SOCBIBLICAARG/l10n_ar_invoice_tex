@@ -1,7 +1,7 @@
 import re
 
 
-def take(p, s, prefix="", suffix=""):
+def take(s, prefix="", suffix=""):
     if not s: return False
     prefix_re = '.*'.join([ re.escape(w) for w in re_label.split(prefix or '')])
     suffix_re = '.*'.join([ re.escape(w) for w in re_label.split(suffix or '')])
