@@ -27,6 +27,8 @@
 \def\generatedby#1{\def\inv@generatedby{#1}}
 \generatedby{Generado con \LaTeX{}}
 
+\newif\ifservice
+
 %% MACRO \inv@header
 %
 % Describe como se debe dibujar la cabeza de la factura.
@@ -62,7 +64,10 @@
     \\
   \hline
   \hline
-  \hspace*{1cm} Período facturado desde \emph{\inv@servicestart} hasta \emph{\inv@serviceend}. \hfill Fecha de Vto. para el pago: \inv@paydue. \hspace*{1cm} \\
+  \ifservice
+  \hspace*{1cm} Período facturado desde \emph{\inv@servicestart} hasta \emph{\inv@serviceend}.
+  \fi
+  \hfill Fecha de Vto. para el pago: \inv@paydue. \hspace*{1cm} \\
   \hline
   \hline
     \small
@@ -189,7 +194,7 @@
       } &
       \begin{tabular}{z{0.2\columnwidth}p{0.2\columnwidth}}
           \noalign{\vspace{4pt}}
-         CAE N°:      & {\inv@cae} \\
+         CAE \textnumero:      & {\inv@cae} \\
          Vencimiento: & {\inv@caedue} \\
           \noalign{\vspace{4pt}}
       \end{tabular} \\
@@ -290,7 +295,7 @@
   
   \gdef\inv@servicestart{Please setup \emph{servicestart}}
   \gdef\inv@serviceend{Please setup \emph{serviceend}}
-  \def\servicerange##1##2{ \gdef\inv@servicestart{##1} \gdef\inv@serviceend{##2} }
+  \def\servicerange##1##2{ \gdef\inv@servicestart{##1} \gdef\inv@serviceend{##2} \servicetrue }
   
   \gdef\inv@currency{Please setup \emph{currency}}
   \def\currency##1{\gdef\inv@currency{##1}}

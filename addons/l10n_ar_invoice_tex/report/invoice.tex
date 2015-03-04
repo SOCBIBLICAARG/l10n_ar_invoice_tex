@@ -53,7 +53,9 @@ from openerp.addons.l10n_ar_invoice_tex.report.invoice import take, flatdate, is
 	\activityinit{${formatLang(company.partner_id.start_date, date=True)}}
 
 	%% Some data
+	% if o.afip_concept in (2, 3):
 	\servicerange{${formatLang(o.afip_service_start, date=True)}}{${formatLang(o.afip_service_end, date=True)}}
+	% endif
 	\paydue{${formatLang(o.date_due, date=True)}}
 
 	%% Customer information
